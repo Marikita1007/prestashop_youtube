@@ -1,0 +1,15 @@
+includes:
+	- %currentWorkingDirectory%/tests/phpstan/phpstan.neon
+
+parameters:
+	ignoreErrors:
+		- '#Access to an undefined property Cookie::\$id_employee.#'
+		- '#Call to private method add\(\) of parent class ObjectModel.#'
+		- '#Call to private method delete\(\) of parent class ObjectModel.#'
+		- '#Call to private method hydrate\(\) of parent class ObjectModel.#'
+		- '#Call to private method update\(\) of parent class ObjectModel.#'
+		- '#Call to private method save\(\) of parent class ObjectModel.#'
+		- '#Class Advice does not have a constructor and must be instantiated without any parameters.#'
+		- '#Class Badge does not have a constructor and must be instantiated without any parameters.#'
+		- '#Class Condition does not have a constructor and must be instantiated without any parameters.#'
+		- '#Constant _PS_CREATION_DATE_ not found.#'

@@ -1,0 +1,50 @@
+imports:
+  - { resource: ../common.yml }
+
+services:
+  ps_checkout.logger.file.finder:
+    class: 'PrestaShop\Module\PrestashopCheckout\Logger\LoggerFileFinder'
+    public: true
+    arguments:
+      - '@ps_checkout.logger.directory'
+      - '@ps_checkout.logger.filename'
+
+  ps_checkout.logger.file.reader:
+    class: 'PrestaShop\Module\PrestashopCheckout\Logger\LoggerFileReader'
+    public: true
+
+  ps_checkout.env.segmentenv:
+    class: 'PrestaShop\Module\PrestashopCheckout\Environment\SegmentEnv'
+    public: true
+
+  ps_checkout.segment.tracker:
+    class: 'PrestaShop\Module\PrestashopCheckout\Segment\SegmentTracker'
+    public: true
+    arguments:
+      - '@ps_checkout.env.segmentenv'
+      - '@ps_checkout.manager.shopuuid'
+
+  ps_checkout.repository.orderpayment:
+    class: 'PrestaShop\Module\PrestashopCheckout\Repository\OrderPaymentRepository'
+    public: true
+
+  ps_checkout.repository.order:
+    class: 'PrestaShop\Module\PrestashopCheckout\Repository\OrderRepository'
+    public: true
+
+  ps_checkout.presenter.order.pending:
+    class: 'PrestaShop\Module\PrestashopCheckout\Presenter\Order\OrderPendingPresenter'
+    public: true
+
+  ps_checkout.presenter.transaction:
+    class: 'PrestaShop\Module\PrestashopCheckout\Presenter\Transaction\TransactionPresenter'
+    public: true
+
+  ps_checkout.api.psx.onboarding:
+    class: 'PrestaShop\Module\PrestashopCheckout\Api\Psx\Onboarding'
+    public: true
+    parent: 'ps_checkout.api.psx.client'
+
+  ps_checkout.api.psx.client:
+    class: 'PrestaShop\Module\PrestashopCheckout\Api\Psx\Client\PsxClient'
+    public: true
