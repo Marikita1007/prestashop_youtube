@@ -24,6 +24,8 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PhpParser\Node\Expr\Cast\Bool_;
+
 if(!defined('_PS_VERSION_')){
     exit;
 } 
@@ -51,5 +53,26 @@ class MyBasicModule extends Module{
         $this->description = $this->l("This is a great testing module");
         $this->confirmUninstall = $this->l("Are you crazy, you are goiong to uninstall a great module!");
 
+    }
+
+    //install method
+    public function install(): Bool
+    {
+        return parent::install() 
+        && $this->registerHook('registerGDPRConsent')
+        && $this->dbinstall();
+
+    }
+
+    //uninstall method
+    public function uninstall(): Bool
+    {
+        return parent::uninstall();
+    }
+
+    //sql install
+    public function dbinstall(){
+        //sql query that create certain table
+        return true;
     }
 }
