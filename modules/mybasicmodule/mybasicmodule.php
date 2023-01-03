@@ -75,4 +75,9 @@ class MyBasicModule extends Module{
         //sql query that create certain table
         return true;
     }
+
+    //The Hooks convention : hooks functions always starts the name from hook. ex hookMyHookFunctionName()
+    public function hookdisplayFooter($params){
+        return "Hello from the basic module footer hook";
+    }
 }
