@@ -78,6 +78,11 @@ class MyBasicModule extends Module{
 
     //The Hooks convention : hooks functions always starts the name from hook. ex hookMyHookFunctionName()
     public function hookdisplayFooter($params){
-        return "Hello from the basic module footer hook";
+        
+        $this->context->smarty->assign([
+            'test' => "Marika Abe",
+            'id_moshop' => $this->context->cart->id_shop
+        ]);
+        return $this->display(__FILE__, 'views/templates/hook/footer.tpl');
     }
 }
