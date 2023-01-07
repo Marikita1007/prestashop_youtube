@@ -84,4 +84,5 @@
     </div>
   </div>
   {hook h='displayNavFullWidth'}
+  {widget name='mybasicmodule' hook='displayNavFullWidth'}
 {/block}
