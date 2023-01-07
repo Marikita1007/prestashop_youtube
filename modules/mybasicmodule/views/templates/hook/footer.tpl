@@ -1,5 +1,5 @@
 <h1>
-    {* Hello {$test} *}
-    {* The shop id is {$id_shop} *}
+    Hello {$myparamtest} ! The shop id is :{$idshop}
+    <hr>
     We are using the widget API
 </h1>

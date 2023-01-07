@@ -33,8 +33,11 @@ if(!defined('_PS_VERSION_')){
 
 //the main class Video:40:36
 class MyBasicModule extends Module implements WidgetInterface {
-    //constructor 
-                                                                        
+    
+
+    private $templateFile;
+
+    //constructor                                                                  
     public function __construct()
     {
         $this->name = "mybasicmodule";
@@ -53,6 +56,9 @@ class MyBasicModule extends Module implements WidgetInterface {
         $this->displayName = $this->l("My very first module");
         $this->description = $this->l("This is a great testing module");
         $this->confirmUninstall = $this->l("Are you crazy, you are goiong to uninstall a great module!");
+
+        // Confirm uninstall
+        $this->templateFile = 'module:mybasicmodule/views/templates/hook/footer.tpl';
 
     }
 
@@ -79,28 +85,38 @@ class MyBasicModule extends Module implements WidgetInterface {
     }
 
     //The Hooks convention : hooks functions always starts the name from hook. ex hookMyHookFunctionName()
-    public function hookdisplayFooter($params)
-    {
-        
-        $this->context->smarty->assign([
-            'test' => "Marika Abe",
-            'id_shop' => $this->context->cart->id_shop
-        ]);
-        return $this->display(__FILE__, 'views/templates/hook/footer.tpl');
+    // public function hookdisplayFooter($params)
+    // {
+    //     //print_r($this->context->cart);
+    //     $this->context->smarty->assign([
+    //         'myparamtest' => "Marika Abe",
+    //         'id_shop' => $this->context->cart->id_shop
+    //     ]);
+    //     return $this->display(__FILE__, 'views/templates/hook/footer.tpl');
  
-    }
+    // }
 
+    //Generate the content of front page
     public function renderWidget($hookName, array $configuration)
     {
+    
         if ($hookName === 'displayNavFullWidth') {
             return 'This is an exception from the displayNavFullWidth hook';
+        };
+        if (!$this->isCached($this->templateFile, $this->getCacheId($this->name))){
+            $this->context->smarty->assign($this->getWidgetVariables($hookName, $configuration));
         }
-        return $this->fetch('module:mybasicmodule/views/templates/hook/footer.tpl',  $this->getCacheId('blockreassurance'));
+        return $this->fetch('module:mybasicmodule/views/templates/hook/footer.tpl');
     }
 
+    //Injecting variables(params) into renderWidget()
+    //It returns an array of parameters that we need to pass them to our template
     public function getWidgetVariables($hookName, array $configuration)
     {
-        return true;
+        return [
+            'idshop' => $this->context->cart->id_shop,
+            'myparamtest' => "Prestashop developer"
+        ];
     }
 
 }
