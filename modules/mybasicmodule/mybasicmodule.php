@@ -120,25 +120,76 @@ class MyBasicModule extends Module implements WidgetInterface {
     }
 
     //configuration page
+    // public function getContent()
+    // {
+
+    //     $message = null;
+
+    //     //This allows me to access to post or get objects.
+    //     if(Tools::getValue("courserating")){
+    //         Configuration::updateValue('COURSE_RATING',Tools::getValue("courserating"));
+    //         $message = "Form save it correctly";
+    //     };
+
+    //     //field: courserating
+    //     $courserating = Configuration::get('COURSE_RATING');
+    //     $this->context->smarty->assign(
+    //         [
+    //             'courserating' => $courserating,
+    //             'message' => $message
+    //         ]
+    //     );
+    //     return $this->fetch('module:mybasicmodule/views/templates/admin/configuration.tpl');
+    // }
+
     public function getContent()
     {
+        return $this->displayForm();
+    }
 
-        $message = null;
+    public function displayForm()
+    {
+        $defaultLang = (int) Configuration::get('PS_LANG_DEFAULT');
 
-        //This allows me to access to post or get objects.
-        if(Tools::getValue("courserating")){
-            Configuration::updateValue('COURSE_RATING',Tools::getValue("courserating"));
-            $message = "Form save it correctly";
-        };
-
-        //field: courserating
-        $courserating = Configuration::get('COURSE_RATING');
-        $this->context->smarty->assign(
-            [
-                'courserating' => $courserating,
-                'message' => $message
+        //form inputs
+        $fields[0]['form'] = [
+            'legend' => [
+                'title' => $this->trans('Rating setting')
+            ],
+            'input' => [
+                [
+                    'type' => 'text',
+                    'label' => $this->l('Course rating'),
+                    'name' => 'courserating',
+                    'size' => 20,
+                    'required' => true,
+                ]
+            ],
+            'submit' => [
+                'title' => $this->trans('Save the rating'),
+                'class' => 'btn btn-primary pull-right'
             ]
-        );
-        return $this->fetch('module:mybasicmodule/views/templates/admin/configuration.tpl');
+        ];
+
+        // instance of HF
+        $helper = new HelperForm();
+
+        // Module, token and currentIndex
+        $helper->table = $this->table;
+        $helper->module = $this;
+        $helper->name_controller = $this->name;
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->currentIndex = AdminController::$currentIndex . '&' . http_build_query(['configure' => $this->name]);
+    
+        // Default language
+        $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
+        $helper->allow_employee_form_lang = $defaultLang;
+
+        //NEED TO ADD TITLE AND TOOLDBAR
+    
+        // Load current value into the form
+        $helper->fields_value['MYMODULE_CONFIG'] = Tools::getValue('MYMODULE_CONFIG', Configuration::get('MYMODULE_CONFIG'));
+    
+        return $helper->generateForm([$fields]);
     }
 }
