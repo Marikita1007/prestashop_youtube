@@ -122,11 +122,21 @@ class MyBasicModule extends Module implements WidgetInterface {
     //configuration page
     public function getContent()
     {
+
+        $message = null;
+
+        //This allows me to access to post or get objects.
+        if(Tools::getValue("courserating")){
+            Configuration::updateValue('COURSE_RATING',Tools::getValue("courserating"));
+            $message = "Form save it correctly";
+        };
+
         //field: courserating
-        $courserating = (int) Configuration::get('COURSE_RATING');
+        $courserating = Configuration::get('COURSE_RATING');
         $this->context->smarty->assign(
             [
-                'courserating' => $courserating
+                'courserating' => $courserating,
+                'message' => $message
             ]
         );
         return $this->fetch('module:mybasicmodule/views/templates/admin/configuration.tpl');
