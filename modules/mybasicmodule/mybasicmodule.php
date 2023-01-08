@@ -122,6 +122,13 @@ class MyBasicModule extends Module implements WidgetInterface {
     //configuration page
     public function getContent()
     {
-        return "This is the configuration page";
+        //field: courserating
+        $courserating = (int) Configuration::get('COURSE_RATING');
+        $this->context->smarty->assign(
+            [
+                'courserating' => $courserating
+            ]
+        );
+        return $this->fetch('module:mybasicmodule/views/templates/admin/configuration.tpl');
     }
 }
