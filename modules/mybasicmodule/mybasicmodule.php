@@ -119,4 +119,9 @@ class MyBasicModule extends Module implements WidgetInterface {
         ];
     }
 
+    //configuration page
+    public function getContent()
+    {
+        return "This is the configuration page";
+    }
 }
