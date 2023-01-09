@@ -85,16 +85,16 @@ class MyBasicModule extends Module implements WidgetInterface {
     }
 
     //The Hooks convention : hooks functions always starts the name from hook. ex hookMyHookFunctionName()
-    // public function hookdisplayFooter($params)
-    // {
-    //     //print_r($this->context->cart);
-    //     $this->context->smarty->assign([
-    //         'myparamtest' => "Marika Abe",
-    //         'id_shop' => $this->context->cart->id_shop
-    //     ]);
-    //     return $this->display(__FILE__, 'views/templates/hook/footer.tpl');
+    public function hookdisplayFooter($params)
+    {
+        //print_r($this->context->cart);
+        $this->context->smarty->assign([
+            'myparamtest' => "Marika Abe",
+            'id_shop' => $this->context->cart->id_shop
+        ]);
+        return $this->display(__FILE__, 'views/templates/hook/footer.tpl');
  
-    // }
+    }
 
     //Generate the content of front page
     public function renderWidget($hookName, array $configuration)
@@ -119,7 +119,7 @@ class MyBasicModule extends Module implements WidgetInterface {
         ];
     }
 
-    //configuration page
+    // //configuration page
     // public function getContent()
     // {
 
@@ -149,6 +149,7 @@ class MyBasicModule extends Module implements WidgetInterface {
 
     public function displayForm()
     {
+
         $defaultLang = (int) Configuration::get('PS_LANG_DEFAULT');
 
         //form inputs
@@ -171,25 +172,40 @@ class MyBasicModule extends Module implements WidgetInterface {
             ]
         ];
 
+        //Downbelow are from the site ,but maybe it needs update
+
         // instance of HF
         $helper = new HelperForm();
 
         // Module, token and currentIndex
-        $helper->table = $this->table;
         $helper->module = $this;
         $helper->name_controller = $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = AdminController::$currentIndex . '&' . http_build_query(['configure' => $this->name]);
-    
-        // Default language
-        $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
+        $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+        
+        //Language
+        $helper->default_form_language = $defaultLang;
         $helper->allow_employee_form_lang = $defaultLang;
 
-        //NEED TO ADD TITLE AND TOOLDBAR
-    
-        // Load current value into the form
-        $helper->fields_value['MYMODULE_CONFIG'] = Tools::getValue('MYMODULE_CONFIG', Configuration::get('MYMODULE_CONFIG'));
-    
-        return $helper->generateForm([$fields]);
+        //Title and toolbar
+        $helper->title = $this->displayName;
+        $helper->show_toolbar = true;
+        $helper->toolbar_scroll = true;
+        $helper->submit_action = 'submit' . $this->name;
+        $helper->toolbar_btn = [
+            'save' => [
+                'desc' => $this->l('Save'),
+                'href' => AdminController::$currentIndex . '&configure=' . $this->name . '&save' . $this->name .
+                    '&token=' . Tools::getAdminTokenLite('AdminModules'),
+            ],
+            'back' => [
+                'href' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite('AdminModules'),
+                'desc' => $this->l('Back to list')
+            ]
+        ];
+        //$helper->fields_value['facebook_widget'] = Configuration::get('blocksocialJM_facebook_widget');
+        //$helper->fields_value['twitter_widget'] = Configuration::get('blocksocialJM_twitter_widget');
+        $helper->fields_value['courserating'] = Configuration::get('COURSE_RATING');
+        return $helper->generateForm($fields);
     }
 }

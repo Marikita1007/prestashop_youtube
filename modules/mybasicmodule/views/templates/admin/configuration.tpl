@@ -13,7 +13,7 @@
         <div class="form-group">
             <label class="form-control-label" for="input1">Normal input</label>
             <input type="text" name="courserating" class="form-control" value="{$courserating}" id="input1"
-                required="required" />
+                required />
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Primary</button>
