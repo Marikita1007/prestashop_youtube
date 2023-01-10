@@ -32,7 +32,8 @@ if(!defined('_PS_VERSION_')){
 } 
 
 //the main class Video:40:36
-class MyBasicModule extends Module implements WidgetInterface {
+class MyBasicModule extends Module implements WidgetInterface 
+{
     
 
     private $templateFile;
@@ -100,6 +101,7 @@ class MyBasicModule extends Module implements WidgetInterface {
     public function renderWidget($hookName, array $configuration)
     {
     
+        echo $this->context->link->getModuleLink($this->name, "test");
         if ($hookName === 'displayNavFullWidth') {
             return 'This is an exception from the displayNavFullWidth hook';
         };
