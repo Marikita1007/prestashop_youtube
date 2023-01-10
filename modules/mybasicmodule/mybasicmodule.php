@@ -142,9 +142,23 @@ class MyBasicModule extends Module implements WidgetInterface {
     //     return $this->fetch('module:mybasicmodule/views/templates/admin/configuration.tpl');
     // }
 
+    //The helper form submission handling
     public function getContent()
     {
-        return $this->displayForm();
+        $output = "";
+        if(Tools::isSubmit( 'submit' . $this->name))
+        {
+            $courserating = Tools::getValue('courserating');
+            if($courserating && !empty($courserating) && Validate::isGenericName($courserating) )
+            {
+                Configuration::updateValue('COURSE_RATING',Tools::getValue("courserating"));
+                $output .= $this->displayConfirmation($this->trans('Form submitted successfully'));
+            }
+            else {
+                $output .= $this->displayError($this->trans('Form has not been submitted successfully'));
+            }    
+        }
+        return $output . $this->displayForm();
     }
 
     public function displayForm()
