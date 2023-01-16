@@ -68,6 +68,7 @@ class MyBasicModule extends Module implements WidgetInterface
     {
         return parent::install() 
         && $this->registerHook('registerGDPRConsent')
+        && $this->registerHook('moduleRoutes')
         && $this->dbinstall();
 
     }
@@ -224,4 +225,22 @@ class MyBasicModule extends Module implements WidgetInterface
         $helper->fields_value['courserating'] = Configuration::get('COURSE_RATING');
         return $helper->generateForm($fields);
     }
+
+    // hoolModuleRoutes
+    public function hookModuleRoutes($params)
+    {
+        return [
+            'test' => [
+                'controller' => 'test',
+                'rule' => "fc-test",
+                'keywords' => [],
+                'params' => [
+                    'module' => $this->name,
+                    'fc' => 'module',
+                    'controller' => 'test'
+                ]
+            ]
+        ];
+    }
+
 }
